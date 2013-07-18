@@ -38,12 +38,10 @@
                 background: #fff;
                 left: 0;
                 float: left;
-                height: 700px;
                 overflow-y: scroll;
                 padding-top: 2em;
                 position: absolute;
                 top: 0;
-                width: 400px;
                 -webkit-transition: -webkit-transform 0.5s;
             }
             li {
@@ -104,6 +102,9 @@
         <script src="http://zeptojs.com/zepto.min.js"></script>
         <script>
             $(document).ready(function() {
+
+                $('li').css('height', $(window).height())
+                       .css('width',  $(window).width());
 
                 $('#previous').on('click', function() {
                     slideTo($('li.current').prev());
