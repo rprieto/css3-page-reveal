@@ -103,11 +103,37 @@
     
         <script src="http://zeptojs.com/zepto.min.js"></script>
         <script>
-            $('#next').on('click', function() {
-                $('li').removeClass('current left');
-                $('li:nth-child(2)').addClass('current');
-                $('li:nth-child(1)').addClass('left');
-                return false;
+            $(document).ready(function() {
+
+                $('#previous').on('click', function() {
+                    slideTo($('li.current').prev());
+                    return false;
+                });
+
+                $('#next').on('click', function() {
+                    slideTo($('li.current').next());
+                    return false;
+                });
+
+                function slideTo(current) {
+                    if (current.length > 0) {
+                        $('li').removeClass('current left right');
+                        current.prev().addClass('left');
+                        current.addClass('current');
+                        current.next().addClass('right');
+                        setTimeout(function() {
+                            scrollTop(current.prev());
+                            scrollTop(current.next());
+                        }, 500);
+                    }
+                }
+                
+                function scrollTop(element) {
+                    if (element.length > 0) {
+                        element[0].scrollTop = 0;
+                    }
+                }
+
             });
         </script>
     
