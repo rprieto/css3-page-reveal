@@ -13,54 +13,36 @@ $(document).ready(function() {
         return false;
     });
 
-    var startX = 0;
+    var sliding = false;
     
-    $('li').on('touchstart', function(e) {
-        startX = e.originalEvent.touches[0].screenX;
-    });
-    
-    $('li').on('touchmove', function(e) {
-        delta = e.originalEvent.touches[0].screenX - startX;
-        
-        if (delta > 10) {
-            $('li.left').addClass('reveal');
-        } else if (delta < -10) {
-            $('li.right').addClass('reveal');
-        }
-        
-        // $('li').css('z-index', '').css('-webkit-transform', '');
-        // 
-        // // reveal
-        // if (delta < 0) {
-        //     var x = - $(window).width() - delta;
-        //     $('li.left').css('z-index', 99).css('-webkit-transform', 'translate3d(' + x + 'px,0,0)');
-        // } else {
-        //     var x = $(window).width() - delta;
-        //     $('li.right').css('z-index', 99).css('-webkit-transform', 'translate3d(' + x + 'px,0,0)');
-        // }
-    });
-    
-    $('li').on('touchend', function(e) {
-        $('li').removeClass('reveal');
-    });
-
     $('li').swipe({
-        // swipeStatus: function(event, phase, direction, distance, duration, fingerCount) {
-        //     if (direction === 'left' && distance > 5) {
-        //         $('li.right').addClass('reveal');
-        //     }
-        //     if (direction === 'right' && distance > 5) {
-        //         $('li.left').addClass('reveal');
-        //     }
-        // },
-        swipeLeft: function(event, direction, distance, duration, fingerCount) {
-            $('li').removeClass('reveal');
-            slideTo($('li.current').next());
+        swipeStatus: function(event, phase, direction, distance, duration, fingerCount) {
+            if (phase === 'start') {
+                sliding = false;
+            }
+            if (!sliding) {
+              if (phase === 'move' && direction === 'left' && distance > 10) {
+                  $('li.right').addClass('reveal');
+              }
+              if (phase === 'move' && direction === 'left' && distance > 80) {
+                  sliding = true;
+                  $('li').removeClass('reveal');
+                  slideTo($('li.current').next());
+              }
+              if (phase === 'move' && direction === 'right' && distance > 10) {
+                  $('li.left').addClass('reveal');
+              }
+              if (phase === 'move' && direction === 'right' && distance > 80) {
+                  sliding = true;
+                  $('li').removeClass('reveal');
+                  slideTo($('li.current').prev());
+              }
+            }
+            if (phase === 'end') {
+                $('li').removeClass('reveal');
+            }
         },
-        swipeRight: function(event, direction, distance, duration, fingerCount) {
-            $('li').removeClass('reveal');
-            slideTo($('li.current').prev());
-        }
+        allowPageScroll: 'vertical'
     });
 
     function slideTo(current) {
