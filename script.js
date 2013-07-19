@@ -1,20 +1,16 @@
 $(document).ready(function() {
 
-    $('ul,li').css('height', $(window).height())
-              .css('width',  $(window).width());
+    var TAP_EVENT = ('ontouchstart' in window) ? 'touchstart' : 'click';
+    var PAGE_WIDTH = $('body').width();
+    var DISTANCE_TO_SWIPE = PAGE_WIDTH / 3;
 
-    $('#previous').on('touchstart', function() {
-        slideTo($('li.current').prev());
-        return false;
-    });
+    $('ul,li').css('height', $(window).height());
+    $('ul,li').css('width', PAGE_WIDTH);
 
-    $('#next').on('touchstart', function() {
-        slideTo($('li.current').next());
-        return false;
-    });
+    $('#previous').on(TAP_EVENT, slideToPrevious);
+    $('#next').on(TAP_EVENT, slideToNext);
 
     var sliding = false;
-    var DISTANCE_TO_SWIPE = $(window).width() / 3;
     
     $('li').swipe({
         swipeStatus: function(event, phase, direction, distance, duration, fingerCount) {
@@ -23,29 +19,45 @@ $(document).ready(function() {
             }
             if (!sliding) {
               if (phase === 'move' && direction === 'left' && distance > 0) {
-                  $('li.right').addClass('wiggle').css('-webkit-transform', 'translate3d(' + ($(window).width() - distance) + 'px,0,0)');
+                  reveal('li.right', PAGE_WIDTH - distance);
               }
               if (phase === 'move' && direction === 'left' && distance > DISTANCE_TO_SWIPE) {
                   sliding = true;
-                  $('li').removeClass('wiggle').css('-webkit-transform', '');
-                  slideTo($('li.current').next());
+                  slideToNext();
               }
               if (phase === 'move' && direction === 'right' && distance > 0) {
-                  $('li.left').addClass('wiggle').css('-webkit-transform', 'translate3d(' + (-$(window).width() + distance) + 'px,0,0)');
+                  reveal('li.left', distance - PAGE_WIDTH);
               }
               if (phase === 'move' && direction === 'right' && distance > DISTANCE_TO_SWIPE) {
                   sliding = true;
-                  $('li').removeClass('wiggle').css('-webkit-transform', '');
-                  slideTo($('li.current').prev());
+                  slideToPrevious();
               }
             }
             if (phase === 'end') {
-                $('li').removeClass('wiggle').css('-webkit-transform', '');
+                stopAllReveals();
             }
         },
         allowPageScroll: 'vertical'
     });
-
+    
+    function reveal(target, amount) {
+        $(target).addClass('reveal').css('-webkit-transform', 'translate3d(' + amount + 'px,0,0)');
+    }
+    
+    function stopAllReveals() {
+      $('li').removeClass('reveal').css('-webkit-transform', '');
+    }
+    
+    function slideToPrevious() {
+        stopAllReveals();
+        slideTo($('li.current').prev());
+    }
+    
+    function slideToNext() {
+        stopAllReveals();
+        slideTo($('li.current').next());
+    }
+    
     function slideTo(current) {
         if (current.length > 0) {
             $('li').removeClass('current left right');

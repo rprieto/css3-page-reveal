@@ -1,11 +1,13 @@
 * {
     -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 body {
     background-color: #eee;
     color: #111;
     overflow: hidden;
+    max-width: 500px;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -14,7 +16,6 @@ body {
     box-sizing: border-box;
     position: fixed;
     text-align: center;
-    width: 100%;
     z-index: 99;
 }
 
@@ -23,10 +24,11 @@ body {
     color: #ff6600;
     box-sizing: border-box;
     display: inline-block;
+    font-weight: bold;
     line-height: 2em;
     height: 2em;
+    padding: 0 1em;
     text-decoration: none;
-    width: 50%;
 }
 
 ul {
@@ -62,7 +64,7 @@ li.current {
     -webkit-transform: translate3d(0,0,0);
 }
 
-li.wiggle {
+li.reveal {
     z-index: 3;
     -webkit-transition: none;
 }
