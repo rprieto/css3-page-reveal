@@ -32,7 +32,7 @@ body {
 ul {
     background-color: #333;
     list-style-type: none;
-    width: 10000px;
+    overflow: hidden;
     -webkit-transform: translate3d(0,0,0);
 }
 

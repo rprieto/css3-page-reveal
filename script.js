@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
-    $('li').css('height', $(window).height())
-           .css('width',  $(window).width());
+    $('ul,li').css('height', $(window).height())
+              .css('width',  $(window).width());
 
     $('#previous').on('touchstart', function() {
         slideTo($('li.current').prev());
