@@ -14,6 +14,7 @@ $(document).ready(function() {
     });
 
     var sliding = false;
+    var DISTANCE_TO_SWIPE = $(window).width() / 3;
     
     $('li').swipe({
         swipeStatus: function(event, phase, direction, distance, duration, fingerCount) {
@@ -21,25 +22,25 @@ $(document).ready(function() {
                 sliding = false;
             }
             if (!sliding) {
-              if (phase === 'move' && direction === 'left' && distance > 10) {
-                  $('li.right').addClass('reveal');
+              if (phase === 'move' && direction === 'left' && distance > 0) {
+                  $('li.right').addClass('wiggle').css('-webkit-transform', 'translate3d(' + ($(window).width() - distance) + 'px,0,0)');
               }
-              if (phase === 'move' && direction === 'left' && distance > 80) {
+              if (phase === 'move' && direction === 'left' && distance > DISTANCE_TO_SWIPE) {
                   sliding = true;
-                  $('li').removeClass('reveal');
+                  $('li').removeClass('wiggle').css('-webkit-transform', '');
                   slideTo($('li.current').next());
               }
-              if (phase === 'move' && direction === 'right' && distance > 10) {
-                  $('li.left').addClass('reveal');
+              if (phase === 'move' && direction === 'right' && distance > 0) {
+                  $('li.left').addClass('wiggle').css('-webkit-transform', 'translate3d(' + (-$(window).width() + distance) + 'px,0,0)');
               }
-              if (phase === 'move' && direction === 'right' && distance > 80) {
+              if (phase === 'move' && direction === 'right' && distance > DISTANCE_TO_SWIPE) {
                   sliding = true;
-                  $('li').removeClass('reveal');
+                  $('li').removeClass('wiggle').css('-webkit-transform', '');
                   slideTo($('li.current').prev());
               }
             }
             if (phase === 'end') {
-                $('li').removeClass('reveal');
+                $('li').removeClass('wiggle').css('-webkit-transform', '');
             }
         },
         allowPageScroll: 'vertical'
